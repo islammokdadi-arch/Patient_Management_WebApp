@@ -7,10 +7,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-initializeDatabase((db) => {
-    setupPatientRoutes(app, db);
+async function startServer() {
+    try {
+        const supabase = await initializeDatabase();
+        setupPatientRoutes(app, supabase);
 
-    app.listen(5000, () => {
-        console.log("Server running on port 5000");
-    });
-});
+        app.listen(5001, () => {
+            console.log("Server running on port 5001 with Supabase");
+        });
+    } catch (error) {
+        console.error("Failed to start server:", error);
+        process.exit(1);
+    }
+}
+
+startServer();
