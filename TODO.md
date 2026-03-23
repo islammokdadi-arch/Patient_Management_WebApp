@@ -1,0 +1,6 @@
+- [ ] Update color palette to new vibrant theme (e.g., neon blues, purples, cyans)
+- [ ] Enhance dark theme with better contrast and creative gradients
+- [ ] Make patient cards more compact and creative (add icons, better layout, animations)
+- [ ] Add creative elements like hover effects, glows, and transitions
+- [ ] Update modal design to match new theme
+- [ ] Test the changes and ensure responsiveness

@@ -1,0 +1,92 @@
+<template>
+    <div>
+      <h1>Welcome to the Main Page!</h1>
+      <button @click="logout">Logout</button>
+      <button @click="AddToList">AddPatient</button>
+      <button @click="Showlist">ShowPatient</button>
+  
+      <!-- Form to Add Patient -->
+      <div v-if="showForm">
+        <input v-model="newPatient.name" placeholder="Name" />
+        <input v-model="newPatient.last_name" placeholder="Last Name" />
+        <input v-model="newPatient.age" type="number" placeholder="Age" />
+        <input v-model="newPatient.disease" placeholder="Disease" />
+        <input v-model="newPatient.dat" type="date" />
+        <select v-model="newPatient.sex">
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+        <button @click="submitPatient">Submit</button>
+      </div>
+  
+      <!-- Show Patients -->
+      <table v-if="showPatients">
+        <tr>
+          <th>Name</th>
+          <th>Last Name</th>
+          <th>Age</th>
+          <th>Disease</th>
+          <th>Date</th>
+          <th>Sex</th>
+        </tr>
+        <tr v-for="patient in patients" :key="patient.id">
+          <td>{{ patient.name }}</td>
+          <td>{{ patient.last_name }}</td>
+          <td>{{ patient.age }}</td>
+          <td>{{ patient.disease }}</td>
+          <td>{{ patient.dat }}</td>
+          <td>{{ patient.sex }}</td>
+        </tr>
+      </table>
+    </div>
+  </template>
+  
+  <script>
+  import axios from "axios";
+  
+  export default {
+    data() {
+      return {
+        showForm: false,
+        showPatients: false,
+        newPatient: {
+          name: "",
+          last_name: "",
+          age: null,
+          disease: "",
+          dat: "",
+          sex: "Male"
+        },
+        patients: []
+      };
+    },
+    methods: {
+      logout() {
+        alert("Logging out...");
+      },
+      AddToList() {
+        this.showForm = true;
+        this.showPatients = false;
+      },
+      Showlist() {
+        axios.get("http://localhost:3000/getPatients")
+          .then(response => {
+            this.patients = response.data;
+            this.showPatients = true;
+            this.showForm = false;
+          })
+          .catch(error => console.error(error));
+      },
+      submitPatient() {
+        axios.post("http://localhost:3000/addPatient", this.newPatient)
+          .then(() => {
+            alert("Patient added successfully!");
+            this.newPatient = { name: "", last_name: "", age: null, disease: "", dat: "", sex: "Male" };
+            this.showForm = false;
+          })
+          .catch(error => console.error(error));
+      }
+    }
+  };
+  </script>
+  
